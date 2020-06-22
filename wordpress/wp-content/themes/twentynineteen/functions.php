@@ -294,6 +294,47 @@ function twentynineteen_colors_css_wrap() {
 }
 add_action( 'wp_head', 'twentynineteen_colors_css_wrap' );
 
+
+/* Custom Post Type Resource */
+function create_posttype_custom_resource() {
+	$supports = array(
+		'title', // post title
+		'editor', // post content
+		'author', // post author
+		'thumbnail', // featured images
+		'excerpt', // post excerpt
+		'custom-fields', // custom fields
+		'comments', // post comments
+		'revisions', // post revisions
+		'post-formats', // post formats
+	);
+	$labels = array(
+		'name' => _x('Resources', 'plural'),
+		'singular_name' => _x('Resource', 'singular'),
+		'menu_name' => _x('Resource', 'admin menu'),
+		'name_admin_bar' => _x('Resource', 'admin bar'),
+		'add_new' => _x('Add New', 'add new'),
+		'add_new_item' => __('Add New Resource'),
+		'new_item' => __('New Resource'),
+		'edit_item' => __('Edit Resource'),
+		'view_item' => __('View Resource'),
+		'all_items' => __('All Resources'),
+		'search_items' => __('Search Resources'),
+		'not_found' => __('No resource found.'),
+	);
+	$args = array(
+		'supports' => $supports,
+		'labels' => $labels,
+		'public' => true,
+		'query_var' => true,
+		'rewrite' => array('slug' => 'resources'),
+		'has_archive' => true,
+		'hierarchical' => false,
+	);
+	register_post_type( 'resource', $args);
+}
+add_action( 'init', 'create_posttype_custom_resource' );
+
 /**
  * SVG Icons class.
  */
