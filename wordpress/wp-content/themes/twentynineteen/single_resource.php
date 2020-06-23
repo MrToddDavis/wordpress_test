@@ -23,6 +23,8 @@ get_header();
 
 				get_template_part( 'template-parts/content/content', 'single' );
 
+				echo get_post_meta( $post->ID, ‘Download URL’, TRUE );
+
 				if ( is_singular( 'attachment' ) ) {
 					// Parent post navigation.
 					the_post_navigation(
