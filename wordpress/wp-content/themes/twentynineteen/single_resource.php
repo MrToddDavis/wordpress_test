@@ -23,6 +23,10 @@ get_header();
 
 				get_template_part( 'template-parts/content/content', 'single' );
 
+				the_terms( $post->ID, 'topics', 'Topics: ', ', ', ' ' );
+
+				the_terms( $post->ID, 'audiences', 'Audiences: ', ', ', ' ' );
+
 				echo get_post_meta( $post->ID, ‘Download URL’, TRUE );
 
 				if ( is_singular( 'attachment' ) ) {

@@ -330,10 +330,76 @@ function create_posttype_custom_resource() {
 		'rewrite' => array('slug' => 'resources'),
 		'has_archive' => true,
 		'hierarchical' => false,
+		'taxonomies' => array('topic','audience'),
 	);
 	register_post_type( 'resource', $args);
 }
 add_action( 'init', 'create_posttype_custom_resource' );
+
+// Adds taxonomies
+add_action( 'init', 'create_topics_nonhierarchical_taxonomy', 0 );
+ 
+function create_topics_nonhierarchical_taxonomy() {
+	$labels = array(
+    'name' => _x( 'Topics', 'taxonomy general name' ),
+    'singular_name' => _x( 'Topic', 'taxonomy singular name' ),
+    'search_items' =>  __( 'Search Topics' ),
+    'popular_items' => __( 'Popular Topics' ),
+    'all_items' => __( 'All Topics' ),
+    'parent_item' => null,
+    'parent_item_colon' => null,
+    'edit_item' => __( 'Edit Topic' ), 
+    'update_item' => __( 'Update Topic' ),
+    'add_new_item' => __( 'Add New Topic' ),
+    'new_item_name' => __( 'New Topic Name' ),
+    'separate_items_with_commas' => __( 'Separate topics with commas' ),
+    'add_or_remove_items' => __( 'Add or remove topics' ),
+    'choose_from_most_used' => __( 'Choose from the most used topics' ),
+    'menu_name' => __( 'Topics' ),
+  );
+  
+  register_taxonomy('topics','post',array(
+    'hierarchical' => false,
+    'labels' => $labels,
+    'show_ui' => true,
+    'show_admin_column' => true,
+    'update_count_callback' => '_update_post_term_count',
+    'query_var' => true,
+    'rewrite' => array( 'slug' => 'topic' ),
+  ));
+}
+
+add_action( 'init', 'create_audiences_nonhierarchical_taxonomy', 0 );
+ 
+function create_audiences_nonhierarchical_taxonomy() {
+	$labels = array(
+    'name' => _x( 'Audiences', 'taxonomy general name' ),
+    'singular_name' => _x( 'Audience', 'taxonomy singular name' ),
+    'search_items' =>  __( 'Search Audiences' ),
+    'popular_items' => __( 'Popular Audiences' ),
+    'all_items' => __( 'All Audiences' ),
+    'parent_item' => null,
+    'parent_item_colon' => null,
+    'edit_item' => __( 'Edit Audience' ), 
+    'update_item' => __( 'Update Audience' ),
+    'add_new_item' => __( 'Add New Audience' ),
+    'new_item_name' => __( 'New Audience Name' ),
+    'separate_items_with_commas' => __( 'Separate audiences with commas' ),
+    'add_or_remove_items' => __( 'Add or remove audience' ),
+    'choose_from_most_used' => __( 'Choose from the most used audiences' ),
+    'menu_name' => __( 'Audience' ),
+  );
+  
+  register_taxonomy('audience','post',array(
+    'hierarchical' => false,
+    'labels' => $labels,
+    'show_ui' => true,
+    'show_admin_column' => true,
+    'update_count_callback' => '_update_post_term_count',
+    'query_var' => true,
+    'rewrite' => array( 'slug' => 'audience' ),
+  ));
+}
 
 /**
  * SVG Icons class.
