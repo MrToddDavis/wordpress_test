@@ -331,6 +331,15 @@ function create_posttype_custom_resource() {
 		'has_archive' => true,
 		'hierarchical' => false,
 		'taxonomies' => array('topic','audience'),
+		'supports' => array(
+            'title',
+            'date',
+            'content',
+            'feature-image',
+            'excerpt',
+            'thumbnail',
+            'custom-fields'
+        ),
 	);
 	register_post_type( 'resource', $args);
 }
@@ -400,6 +409,17 @@ function create_audiences_nonhierarchical_taxonomy() {
     'rewrite' => array( 'slug' => 'audience' ),
   ));
 }
+
+/**
+ * Set resources limit at 10 per archive page.
+ */
+function custom_posts_per_page( $query ) {
+
+	if ( $query->is_archive('resource') ) {
+		set_query_var('posts_per_page', 10);
+	}
+}
+add_action( 'pre_get_posts', 'custom_posts_per_page' );
 
 /**
  * SVG Icons class.
