@@ -1,8 +1,8 @@
 <?php
 /**
- * The template for displaying archive pages
+ * The template for displaying search results pages
  *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
+ * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#search-result
  *
  * @package WordPress
  * @subpackage Twenty_Nineteen
@@ -18,9 +18,32 @@ get_header();
 		<?php if ( have_posts() ) : ?>
 
 			<header class="page-header">
+				<h1 class="page-title">
+					<?php _e( 'Search results for: ', 'twentynineteen' ); ?>
+					<span class="page-description"><?php echo get_search_query(); ?></span>
+				</h1>
+
 				<?php
-					the_archive_title( '<h1 class="page-title">', '</h1>' );
+				/*
+				 * Dropdowns for each taxonomy and term within.
+				 */
+				$taxonomies = get_taxonomies();
+				foreach ($taxonomies as $taxonomy) {
+					echo '<label for="' . $taxonomy . '">' . $taxonomy . ':</label>
+					<select name="' . $taxonomy . '" id="' . $taxonomy . '">';
+					$terms = get_the_term_list( $post->ID, '$taxonomy', ',', '' );
+					foreach ($term in $terms) {
+						echo '<option value="' . $term . '">' . $term . '</option>'
+					}
+					echo '</select>'
+				}
 				?>
+				
+				<?php
+				get_the_term_list( $post->ID, 'audience', '<strong>Audiences: </strong>', ', ', ' ');
+				get_the_term_list( $post->ID, 'topic', '<strong>Topics: </strong>', ', ', ' ');
+				?>
+
 			</header><!-- .page-header -->
 
 			<?php
@@ -35,10 +58,6 @@ get_header();
 				 * will be used instead.
 				 */
 				get_template_part( 'template-parts/content/content', 'excerpt' );
-
-				the_terms( $post->ID, 'topics', 'Topics: ', ', ', ' | ' );
-
-				the_terms( $post->ID, 'audiences', 'Audiences: ', ', ', ' | ' );
 
 				// End the loop.
 			endwhile;
