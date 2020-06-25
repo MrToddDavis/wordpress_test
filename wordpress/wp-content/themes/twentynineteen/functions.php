@@ -294,6 +294,133 @@ function twentynineteen_colors_css_wrap() {
 }
 add_action( 'wp_head', 'twentynineteen_colors_css_wrap' );
 
+
+/* Custom Post Type Resource */
+function create_posttype_custom_resource() {
+	$supports = array(
+		'title', // post title
+		'editor', // post content
+		'author', // post author
+		'thumbnail', // featured images
+		'excerpt', // post excerpt
+		'custom-fields', // custom fields
+		'comments', // post comments
+		'revisions', // post revisions
+		'post-formats', // post formats
+	);
+	$labels = array(
+		'name' => _x('Resources', 'plural'),
+		'singular_name' => _x('Resource', 'singular'),
+		'menu_name' => _x('Resource', 'admin menu'),
+		'name_admin_bar' => _x('Resource', 'admin bar'),
+		'add_new' => _x('Add New', 'add new'),
+		'add_new_item' => __('Add New Resource'),
+		'new_item' => __('New Resource'),
+		'edit_item' => __('Edit Resource'),
+		'view_item' => __('View Resource'),
+		'all_items' => __('All Resources'),
+		'search_items' => __('Search Resources'),
+		'not_found' => __('No resource found.'),
+	);
+	$args = array(
+		'supports' => $supports,
+		'labels' => $labels,
+		'public' => true,
+		'query_var' => true,
+		'rewrite' => array('slug' => 'resources'),
+		'has_archive' => true,
+		'hierarchical' => false,
+		'taxonomies' => array('topic','audience'),
+		'supports' => array(
+            'title',
+            'date',
+            'content',
+            'feature-image',
+            'excerpt',
+            'thumbnail',
+            'custom-fields'
+        ),
+	);
+	register_post_type( 'resource', $args);
+}
+add_action( 'init', 'create_posttype_custom_resource' );
+
+// Adds taxonomies
+add_action( 'init', 'create_topics_nonhierarchical_taxonomy', 0 );
+ 
+function create_topics_nonhierarchical_taxonomy() {
+	$labels = array(
+    'name' => _x( 'Topics', 'taxonomy general name' ),
+    'singular_name' => _x( 'Topic', 'taxonomy singular name' ),
+    'search_items' =>  __( 'Search Topics' ),
+    'popular_items' => __( 'Popular Topics' ),
+    'all_items' => __( 'All Topics' ),
+    'parent_item' => null,
+    'parent_item_colon' => null,
+    'edit_item' => __( 'Edit Topic' ), 
+    'update_item' => __( 'Update Topic' ),
+    'add_new_item' => __( 'Add New Topic' ),
+    'new_item_name' => __( 'New Topic Name' ),
+    'separate_items_with_commas' => __( 'Separate topics with commas' ),
+    'add_or_remove_items' => __( 'Add or remove topics' ),
+    'choose_from_most_used' => __( 'Choose from the most used topics' ),
+    'menu_name' => __( 'Topics' ),
+  );
+  
+  register_taxonomy('topics','post',array(
+    'hierarchical' => false,
+    'labels' => $labels,
+    'show_ui' => true,
+    'show_admin_column' => true,
+    'update_count_callback' => '_update_post_term_count',
+    'query_var' => true,
+    'rewrite' => array( 'slug' => 'topic' ),
+  ));
+}
+
+add_action( 'init', 'create_audiences_nonhierarchical_taxonomy', 0 );
+ 
+function create_audiences_nonhierarchical_taxonomy() {
+	$labels = array(
+    'name' => _x( 'Audiences', 'taxonomy general name' ),
+    'singular_name' => _x( 'Audience', 'taxonomy singular name' ),
+    'search_items' =>  __( 'Search Audiences' ),
+    'popular_items' => __( 'Popular Audiences' ),
+    'all_items' => __( 'All Audiences' ),
+    'parent_item' => null,
+    'parent_item_colon' => null,
+    'edit_item' => __( 'Edit Audience' ), 
+    'update_item' => __( 'Update Audience' ),
+    'add_new_item' => __( 'Add New Audience' ),
+    'new_item_name' => __( 'New Audience Name' ),
+    'separate_items_with_commas' => __( 'Separate audiences with commas' ),
+    'add_or_remove_items' => __( 'Add or remove audience' ),
+    'choose_from_most_used' => __( 'Choose from the most used audiences' ),
+    'menu_name' => __( 'Audience' ),
+  );
+  
+  register_taxonomy('audience','post',array(
+    'hierarchical' => false,
+    'labels' => $labels,
+    'show_ui' => true,
+    'show_admin_column' => true,
+    'update_count_callback' => '_update_post_term_count',
+    'query_var' => true,
+    'rewrite' => array( 'slug' => 'audience' ),
+  ));
+}
+
+/**
+ * Set resources limit at 10 per archive page.
+ */
+function custom_posts_per_page( $query ) {
+
+	if ( $query->is_archive('resource') ) {
+		set_query_var('posts_per_page', 10);
+	}
+}
+add_action( 'pre_get_posts', 'custom_posts_per_page' );
+
 /**
  * SVG Icons class.
  */
