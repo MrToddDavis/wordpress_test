@@ -21,13 +21,17 @@ get_header();
 			while ( have_posts() ) :
 				the_post();
 
+				get_the_post_thumbnail( $page->ID, 'thumbnail' );
+
 				get_template_part( 'template-parts/content/content', 'single' );
 
 				the_terms( $post->ID, 'topics', 'Topics: ', ', ', ' ' );
 
 				the_terms( $post->ID, 'audiences', 'Audiences: ', ', ', ' ' );
 
-				echo get_post_meta( $post->ID, ‘Download URL’, TRUE );
+				$downloadURL = get_post_meta( $post->ID, ‘Download URL’, TRUE );
+				// Not sure if this function returns a link or just the string, so link added just in case
+				echo '<a href="' . $downloadURL . '">' . $downloadURL . '</a>';
 
 				if ( is_singular( 'attachment' ) ) {
 					// Parent post navigation.

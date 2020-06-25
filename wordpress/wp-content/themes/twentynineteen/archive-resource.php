@@ -40,6 +40,8 @@ get_header();
 
 				the_terms( $post->ID, 'audiences', 'Audiences: ', ', ', ' | ' );
 
+				echo '<button type="button" onclick="history.back();">Return to Results</button> ';
+
 				// End the loop.
 			endwhile;
 

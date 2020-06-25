@@ -26,6 +26,7 @@ get_header();
 				<?php
 				/*
 				 * Dropdowns for each taxonomy and term within.
+				 * Not sure what this outputs. If it's an array of objects, would do $taxonomy->name.
 				 */
 				$taxonomies = get_taxonomies();
 				foreach ($taxonomies as $taxonomy) {
